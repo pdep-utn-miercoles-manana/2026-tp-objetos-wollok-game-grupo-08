@@ -1,0 +1,10 @@
+import wollok.game.*
+
+program pizzeroArgento {
+  game.title("Pizzero Argento")
+  game.width(8)
+  game.height(8)
+  
+  pizzeroArgento.iniciar()
+  game.start()
+}
