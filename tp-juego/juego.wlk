@@ -9,6 +9,9 @@ object juego {
   const barraInf = barraInferior
   var estado = "SIN INICIAR"
   var clientesInicializados = false
+
+  // lista de barras que ayudan a que dsp el jugador se mueva, ordenadas de arriba para abajo
+    const property barras = [barraSuperior, barraMediaSuperior, barraMediaInferior, barraInferior]
   
   method iniciar() {
     if (!clientesInicializados) {
@@ -18,6 +21,7 @@ object juego {
     estado = "EN CURSO"
   }
   
+  //habria que definir mejor a lso clientes 
   method cargarClientesIniciales() {
     barraSup.agregarCliente(new Hambriento(pedido = 1, paciencia = 5))
     barraSup.agregarCliente(new Hambriento(pedido = 2, paciencia = 6))
