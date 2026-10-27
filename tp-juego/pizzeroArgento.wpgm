@@ -1,0 +1,31 @@
+import wollok.game.*
+import juego.*
+import barra.*
+import jugador.*
+
+program pizzeroArgento {
+    game.title("Pizzero Argento")
+    game.width(8)
+    game.height(8)
+
+    const unJugador = new Jugador()
+    
+    juego.iniciar()
+    
+    //esto no se si esta del todo bien lo que hice 
+    game.onTick(1000, "bajarPacienciaClientes", {
+        juego.barras().forEach({ barra => 
+            barra.clientes().forEach({ cliente => cliente.pasarTiempo(unJugador) })
+        })
+    })
+    
+
+    //teclas para que interactue el jugador
+    keyboard.up().onPressDo({ unJugador.moverseArriba() })
+    keyboard.down().onPressDo({ unJugador.moverAbajo() })
+    keyboard.x().onPressDo({ unJugador.prepararPizza() })
+    keyboard.c().onPressDo({ unJugador.entregarPedido(unJugador) })
+    keyboard.space().onPressDo({ unJugador.minijuegoActual().registrarClick()})
+
+    game.start()
+}

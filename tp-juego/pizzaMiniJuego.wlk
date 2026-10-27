@@ -1,4 +1,5 @@
 import jugador.*
+import wollok.game.*
 
 class PizzaMiniJuego {
     var property clicksTotales = 10
@@ -9,7 +10,7 @@ class PizzaMiniJuego {
         clicksActuales = 0
     }
     
-    method clickBoton() {
+    method registrarClick() {
         clicksActuales = clicksActuales + 1
         if (clicksActuales >= clicksTotales) {
             self.completarPizza()
@@ -18,5 +19,6 @@ class PizzaMiniJuego {
     
     method completarPizza() {
         jugador.crearPizza()
+        // aca habria indicar que termine el jeugo
     }
 }
