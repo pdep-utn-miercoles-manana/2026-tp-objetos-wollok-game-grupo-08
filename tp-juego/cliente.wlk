@@ -57,7 +57,7 @@ class Critico inherits Cliente {
     }
 }
 
-class Casual inherits Cliente { //habria que sacar casual si tecnicamente no hace nada
+class Casual inherits Cliente { // habria que sacar casual si tecnicamente no hace nada
     // no hace nada extra al irse, se retira nomas
 }
 

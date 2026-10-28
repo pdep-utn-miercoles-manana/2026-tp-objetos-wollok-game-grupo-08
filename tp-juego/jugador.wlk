@@ -64,7 +64,7 @@ class Jugador {
     
     method moverAbajo() {
         const indexActual = juego.barras().indexOf(barraActual)
-        // si no esta en la barra de abajo de todo se mueve a la que le sigue 
+        // si no esta en la barra de abajo de todo se mueve a la que le sigue
         if (indexActual < juego.barras().size() - 1) {
             barraActual = juego.barras().get(indexActual + 1)
         }

@@ -11,7 +11,7 @@ object juego {
   var clientesInicializados = false
 
   // lista de barras que ayudan a que dsp el jugador se mueva, ordenadas de arriba para abajo
-    const property barras = [barraSuperior, barraMediaSuperior, barraMediaInferior, barraInferior]
+  const property barras = [barraSuperior, barraMediaSuperior, barraMediaInferior, barraInferior]
   
   method iniciar() {
     if (!clientesInicializados) {

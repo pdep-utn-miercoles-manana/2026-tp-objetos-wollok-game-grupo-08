@@ -19,6 +19,5 @@ class PizzaMiniJuego {
     
     method completarPizza() {
         jugador.crearPizza()
-        // aca habria indicar que termine el jeugo
     }
 }
