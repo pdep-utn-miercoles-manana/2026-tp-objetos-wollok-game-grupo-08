@@ -126,4 +126,36 @@ describe "Pizzero Argento" {
 		assert.equals(0, unJugador.puntaje())
 		assert.that(unaBarra.clientes().isEmpty())
 	}
+
+	test "un jugador puede moverse hacia abajo" {
+    	const unJugador = new Jugador()
+
+    	unJugador.moverseAbajo()
+
+    	assert.equals(barraMediaSuperior, unJugador.barraActual())
+	}
+
+	test "un jugador puede moverse hacia arriba" {
+    	const unJugador = new Jugador(barraActual = barraInferior)
+
+    	unJugador.moverseArriba()
+
+    	assert.equals(barraMediaInferior, unJugador.barraActual())
+	}
+
+	test "un jugador no puede moverse arriba desde la barra superior" {
+    	const unJugador = new Jugador()
+
+    	unJugador.moverseArriba()
+
+    	assert.equals(barraSuperior, unJugador.barraActual())
+	}
+
+	test "un jugador no puede moverse abajo desde la barra inferior" {
+    	const unJugador = new Jugador(barraActual = barraInferior)
+
+    	unJugador.moverseAbajo()
+
+    	assert.equals(barraInferior, unJugador.barraActual())
+	}
 }

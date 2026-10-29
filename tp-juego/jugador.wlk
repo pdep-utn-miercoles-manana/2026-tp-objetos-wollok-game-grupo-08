@@ -54,19 +54,23 @@ class Jugador {
         puntaje = (puntaje - puntosPerdidos).max(0)
     }
 
-    method moverseArriba() {
-        const indexActual = juego.barras().indexOf(barraActual)
-        // si no esta en la barra de abajo de todo se mueve a la que le sigue
-        if (indexActual > 0) {
-            barraActual = juego.barras().get(indexActual - 1)
+    method moverseAbajo() {
+        const numeroDeBarraActual = self.obtenerNumeroDeBarraActual(barraActual)
+
+        if (numeroDeBarraActual < juego.barras().size()) {
+            barraActual = juego.barras().get(numeroDeBarraActual)
         }
     }
-    
-    method moverAbajo() {
-        const indexActual = juego.barras().indexOf(barraActual)
-        // si no esta en la barra de abajo de todo se mueve a la que le sigue
-        if (indexActual < juego.barras().size() - 1) {
-            barraActual = juego.barras().get(indexActual + 1)
+
+    method moverseArriba() {
+        const numeroDeBarraActual = self.obtenerNumeroDeBarraActual(barraActual)
+
+        if (numeroDeBarraActual > 1) {
+            barraActual = juego.barras().get(numeroDeBarraActual - 2)
         }
+    }
+
+    method obtenerNumeroDeBarraActual(barra) {
+        return barra.numero()
     }
 }
