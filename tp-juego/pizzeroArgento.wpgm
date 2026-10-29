@@ -24,7 +24,7 @@ program pizzeroArgento {
     keyboard.up().onPressDo({ unJugador.moverseArriba() })
     keyboard.down().onPressDo({ unJugador.moverAbajo() })
     keyboard.x().onPressDo({ unJugador.prepararPizza() })
-    keyboard.c().onPressDo({ unJugador.entregarPedido(unJugador) })
+    keyboard.c().onPressDo({ unJugador.entregarPedido() })
     keyboard.space().onPressDo({ unJugador.minijuegoActual().registrarClick()})
 
     game.start()

@@ -9,15 +9,13 @@ class Cliente {
     
     // recibe las pizzas del jugador
     method recibirPedido(cantidadEntregada, unJugador) {
-        
         if (cantidadEntregada >= pedido) { // si le das de mas al cliente obviamente se va a hacer el bld y se las va a llevar
-            // si eran las suficientes el cliente se va
-            self.irse()
+            unJugador.perderPizzas()
             unJugador.sumarPuntos(puntos)
+            self.irse()
         } else {
             // si le das menos se enoja
             self.enojarse(unJugador)
-            return 0
         }
     }
     
@@ -64,9 +62,8 @@ class Casual inherits Cliente { // habria que sacar casual si tecnicamente no ha
 class Familia inherits Cliente {
     override method reaccionar(unJugador) {
         // hace que se retire otro cliente de la misma barra
-        if (barra != null and not barra.clientes().isEmpty()) {
-            const clienteExtra = barra.clientes().any()
-            barra.removerCliente(clienteExtra)
+        if(barra != null) {
+            barra.retirarOtroCliente(self)
         }
     }
 }

@@ -73,7 +73,7 @@ describe "Pizzero Argento" {
 		const unJugador = new Jugador()
 
 		assert.throwsExceptionWithMessage("No hay pizzas en mano para entregar", {
-			unJugador.entregarPedido(unJugador)
+			unJugador.entregarPedido()
 		})
 	}
 
@@ -82,7 +82,7 @@ describe "Pizzero Argento" {
 		unJugador.barraActual(new Barra())
 
 		assert.throwsExceptionWithMessage("No hay clientes en esta barra", {
-			unJugador.entregarPedido(unJugador)
+			unJugador.entregarPedido()
 		})
 	}
 
@@ -93,7 +93,7 @@ describe "Pizzero Argento" {
 		unaBarra.agregarCliente(unCliente)
 		unJugador.barraActual(unaBarra)
 
-		unJugador.entregarPedido(unJugador)
+		unJugador.entregarPedido()
 
 		assert.that(unaBarra.clientes().isEmpty())
 		assert.equals(10, unJugador.puntaje())
@@ -107,7 +107,7 @@ describe "Pizzero Argento" {
 		unaBarra.agregarCliente(unCliente)
 		unJugador.barraActual(unaBarra)
 
-		unJugador.entregarPedido(unJugador)
+		unJugador.entregarPedido()
 
 		assert.that(unaBarra.clientes().isEmpty())
 		assert.equals(0, unJugador.puntaje())
@@ -121,7 +121,7 @@ describe "Pizzero Argento" {
 		unaBarra.agregarCliente(unCliente)
 		unJugador.barraActual(unaBarra)
 
-		unJugador.entregarPedido(unJugador)
+		unJugador.entregarPedido()
 
 		assert.equals(0, unJugador.puntaje())
 		assert.that(unaBarra.clientes().isEmpty())
