@@ -13,8 +13,7 @@ class Jugador {
     self.validarEntrega()
     // agarra al primer cliente de la barra
     const clienteAAtender = barraActual.obtenerPrimerCliente()
-    clienteAAtender.recibirPedido(pizzasEnMano, self)
-  
+    clienteAAtender.validarPedido(pizzasEnMano, self)
   }
 
   method validarEntrega() {
