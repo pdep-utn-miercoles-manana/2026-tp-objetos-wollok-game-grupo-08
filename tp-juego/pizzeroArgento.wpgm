@@ -5,27 +5,54 @@ import jugador.*
 
 program pizzeroArgento {
     game.title("Pizzero Argento")
-    game.width(8)
-    game.height(8)
-
-    const unJugador = new Jugador()
+    game.width(12)
+    game.height(9)
+    
+    // Añadimos las barras y al jugador visualmente
+    game.addVisual(barraSuperior)
+    game.addVisual(barraMediaSuperior)
+    game.addVisual(barraMediaInferior)
+    game.addVisual(barraInferior)
+    game.addVisual(jugador)
     
     juego.iniciar()
     
-    //esto no se si esta del todo bien lo que hice 
-    game.onTick(1000, "bajarPacienciaClientes", {
+    // Timer de paciencia (baja cada 1 segundo)
+    game.onTick(1000, "bajarPaciencia", {
         juego.barras().forEach({ barra => 
-            barra.clientes().forEach({ cliente => cliente.pasarTiempo(unJugador) })
+            barra.clientes().copy().forEach({ cliente => 
+                cliente.pasarTiempo(jugador)
+                // Si el cliente se fue, lo removemos visualmente del juego
+                if (cliente.barra() == null) {
+                    game.removeVisual(cliente)
+                }
+            })
         })
     })
-    
 
-    //teclas para que interactue el jugador
-    keyboard.up().onPressDo({ unJugador.moverseArriba() })
-    keyboard.down().onPressDo({ unJugador.moverAbajo() })
-    keyboard.x().onPressDo({ unJugador.prepararPizza() })
-    keyboard.c().onPressDo({ unJugador.entregarPedido() })
-    keyboard.space().onPressDo({ unJugador.minijuegoActual().registrarClick()})
+    // Controles de movimiento
+    keyboard.up().onPressDo({ jugador.subir() })
+    keyboard.down().onPressDo({ jugador.bajar() })
+    
+    // Acciones
+    keyboard.x().onPressDo({ 
+        jugador.prepararPizza()
+        if (jugador.minijuegoActual() != null) {
+            game.addVisual(jugador.minijuegoActual())
+        }
+    })
+    
+    keyboard.c().onPressDo({ 
+        const clienteAtendido = jugador.barraActual().obtenerPrimerCliente()
+        jugador.entregarPedido()
+        game.removeVisual(clienteAtendido) // Lo quita visualmente al atenderlo
+    })
+    
+    keyboard.space().onPressDo({ 
+        if (jugador.minijuegoActual() != null) {
+            jugador.minijuegoActual().registrarClick()
+        }
+    })
 
     game.start()
 }

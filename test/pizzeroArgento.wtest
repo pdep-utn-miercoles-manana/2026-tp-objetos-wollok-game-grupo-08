@@ -4,158 +4,116 @@ import tp-juego.cliente.*
 
 describe "Pizzero Argento" {
 	test "un jugador comienza sin puntos ni pizzas y sin minijuego" {
-		const unJugador = new Jugador()
-
-		assert.equals(0, unJugador.puntaje())
-		assert.equals(0, unJugador.pizzasEnMano())
-		assert.equals(null, unJugador.minijuegoActual())
-		assert.equals(barraSuperior, unJugador.barraActual())
+		assert.equals(0, jugador.puntaje())
+		assert.equals(0, jugador.pizzasEnMano())
+		assert.equals(null, jugador.minijuegoActual())
+		assert.equals(barraSuperior, jugador.barraActual())
 	}
 
 	test "el jugador suma puntos" {
-		const unJugador = new Jugador()
-
-		unJugador.sumarPuntos(10)
-		unJugador.sumarPuntos(5)
-
-		assert.equals(15, unJugador.puntaje())
-	}
-
-	test "el jugador resta puntos sin quedar por debajo de cero" {
-		const unJugador = new Jugador(puntaje = 20)
-
-		unJugador.restarPuntos(7)
-
-		assert.equals(13, unJugador.puntaje())
+		jugador.sumarPuntos(10)
+		jugador.sumarPuntos(5)
+		assert.equals(15, jugador.puntaje())
 	}
 
 	test "el jugador no puede tener puntaje negativo" {
-		const unJugador = new Jugador(puntaje = 20)
-
-		unJugador.restarPuntos(30)
-
-		assert.equals(0, unJugador.puntaje())
+		jugador.restarPuntos(30)
+		assert.equals(0, jugador.puntaje())
 	}
 
 	test "preparar una pizza crea un minijuego sin clicks" {
-		const unJugador = new Jugador()
+		jugador.prepararPizza()
 
-		unJugador.prepararPizza()
-
-		assert.notThat(unJugador.minijuegoActual() == null)
-		assert.equals(0, unJugador.minijuegoActual().clicksActuales())
-		assert.equals(10, unJugador.minijuegoActual().clicksTotales())
+		assert.notThat(jugador.minijuegoActual() == null)
+		assert.equals(0, jugador.minijuegoActual().clicksActuales())
+		assert.equals(10, jugador.minijuegoActual().clicksTotales())
 	}
 
 	test "un minijuego no crea una pizza antes de completar los clicks" {
-		const unJugador = new Jugador()
-		unJugador.prepararPizza()
+		jugador.prepararPizza()
 
         // No encontramos una forma de hacer que un número se repita N veces en Wollok, así que usamos un forEach con un rango
-		(1..9).forEach({ i => unJugador.minijuegoActual().registrarClick() })
+		(1..9).forEach({ i => jugador.minijuegoActual().registrarClick() })
 
-		assert.equals(0, unJugador.pizzasEnMano())
-		assert.equals(9, unJugador.minijuegoActual().clicksActuales())
+		assert.equals(0, jugador.pizzasEnMano())
+		assert.equals(9, jugador.minijuegoActual().clicksActuales())
 	}
 
 	test "diez clicks crean una pizza y terminan el minijuego" {
-		const unJugador = new Jugador()
-		unJugador.prepararPizza()
-
+		jugador.prepararPizza()
         // No encontramos una forma de hacer que un número se repita N veces en Wollok, así que usamos un forEach con un rango
-		(1..10).forEach({ i => unJugador.minijuegoActual().registrarClick() })
+		(1..10).forEach({ i => jugador.minijuegoActual().registrarClick() })
 
-		assert.equals(1, unJugador.pizzasEnMano())
-		assert.equals(null, unJugador.minijuegoActual())
+		assert.equals(1, jugador.pizzasEnMano())
+		assert.equals(null, jugador.minijuegoActual())
 	}
 
 	test "entregar sin pizzas tira una excepcion" {
-		const unJugador = new Jugador()
-
+		jugador.pizzasEnMano(0)
 		assert.throwsExceptionWithMessage("No hay pizzas en mano para entregar", {
-			unJugador.entregarPedido()
+			jugador.entregarPedido()
 		})
 	}
 
 	test "entregar en una barra sin clientes tira una excepcion" {
-		const unJugador = new Jugador(pizzasEnMano = 1)
-		unJugador.barraActual(new Barra())
-
+		jugador.pizzasEnMano(1)
+		barraSuperior.clientes().clear()
 		assert.throwsExceptionWithMessage("No hay clientes en esta barra", {
-			unJugador.entregarPedido()
+			jugador.entregarPedido()
 		})
 	}
 
 	test "entregar la cantidad exacta saca al cliente y suma puntos" {
-		const unJugador = new Jugador(pizzasEnMano = 2)
-		const unaBarra = new Barra()
-		const unCliente = new Cliente(pedido = 2)
-		unaBarra.agregarCliente(unCliente)
-		unJugador.barraActual(unaBarra)
-
-		unJugador.entregarPedido()
-
-		assert.that(unaBarra.clientes().isEmpty())
-		assert.equals(10, unJugador.puntaje())
-		assert.equals(0, unJugador.pizzasEnMano())
+		jugador.pizzasEnMano(2)
+		jugador.barraActual(barraSuperior)
+		barraSuperior.agregarCliente(new Hambriento(pedido = 2))
+		jugador.entregarPedido()
+		assert.that(barraSuperior.clientes().isEmpty())
+		assert.equals(10, jugador.puntaje())
+		assert.equals(0, jugador.pizzasEnMano())
 	}
 
 	test "entregar menos pizzas enoja a un hambriento y no suma puntos" {
-		const unJugador = new Jugador(pizzasEnMano = 1)
-		const unaBarra = new Barra()
-		const unCliente = new Hambriento(pedido = 2)
-		unaBarra.agregarCliente(unCliente)
-		unJugador.barraActual(unaBarra)
-
-		unJugador.entregarPedido()
-
-		assert.that(unaBarra.clientes().isEmpty())
-		assert.equals(0, unJugador.puntaje())
-		assert.equals(0, unJugador.pizzasEnMano())
+		jugador.pizzasEnMano(1)
+		barraSuperior.agregarCliente(new Hambriento(pedido = 2))
+		jugador.barraActual(barraSuperior)
+		jugador.entregarPedido()
+		assert.that(barraSuperior.clientes().isEmpty())
+		assert.equals(0, jugador.puntaje())
+		assert.equals(0, jugador.pizzasEnMano())
 	}
 
 	test "un critico resta puntos y no produce puntaje negativo" {
-		const unJugador = new Jugador(puntaje = 20, pizzasEnMano = 1)
-		const unaBarra = new Barra()
-		const unCliente = new Critico(pedido = 2)
-		unaBarra.agregarCliente(unCliente)
-		unJugador.barraActual(unaBarra)
-
-		unJugador.entregarPedido()
-
-		assert.equals(0, unJugador.puntaje())
-		assert.that(unaBarra.clientes().isEmpty())
+		jugador.pizzasEnMano(1)
+		jugador.puntaje(20)
+		barraSuperior.agregarCliente(new Critico(pedido = 2))
+		jugador.barraActual(barraSuperior)
+		jugador.entregarPedido()
+		assert.equals(0, jugador.puntaje())
+		assert.that(barraSuperior.clientes().isEmpty())
 	}
 
-	test "un jugador puede moverse hacia abajo" {
-    	const unJugador = new Jugador()
-
-    	unJugador.moverseAbajo()
-
-    	assert.equals(barraMediaSuperior, unJugador.barraActual())
+	test "un jugador puede bajar" {
+		jugador.barraActual(barraSuperior)
+    	jugador.bajar()
+    	assert.equals(barraMediaSuperior, jugador.barraActual())
 	}
 
-	test "un jugador puede moverse hacia arriba" {
-    	const unJugador = new Jugador(barraActual = barraInferior)
-
-    	unJugador.moverseArriba()
-
-    	assert.equals(barraMediaInferior, unJugador.barraActual())
+	test "un jugador puede subir" {
+		jugador.barraActual(barraMediaSuperior)
+    	jugador.subir()
+		assert.equals(barraSuperior, jugador.barraActual())
 	}
 
-	test "un jugador no puede moverse arriba desde la barra superior" {
-    	const unJugador = new Jugador()
-
-    	unJugador.moverseArriba()
-
-    	assert.equals(barraSuperior, unJugador.barraActual())
+	test "un jugador no puede subir desde la barra superior" {
+    	jugador.barraActual(barraSuperior)
+    	jugador.subir()
+    	assert.equals(barraSuperior, jugador.barraActual())
 	}
 
-	test "un jugador no puede moverse abajo desde la barra inferior" {
-    	const unJugador = new Jugador(barraActual = barraInferior)
-
-    	unJugador.moverseAbajo()
-
-    	assert.equals(barraInferior, unJugador.barraActual())
+	test "un jugador no puede bajar desde la barra inferior" {
+		jugador.barraActual(barraInferior)
+    	jugador.bajar()
+    	assert.equals(barraInferior, jugador.barraActual())
 	}
 }

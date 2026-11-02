@@ -3,15 +3,15 @@ import juego.*
 import barra.*
 import pizzaMiniJuego.*
 
-class Jugador {
+object jugador {
   var property puntaje = 0
   var property barraActual = barraSuperior
   var property pizzasEnMano = 0
   var property minijuegoActual = null
+  var property position = game.at(1, 2)
   
   method entregarPedido() {
     self.validarEntrega()
-    // agarra al primer cliente de la barra
     const clienteAAtender = barraActual.obtenerPrimerCliente()
     clienteAAtender.validarPedido(pizzasEnMano, self)
   }
@@ -22,16 +22,12 @@ class Jugador {
     }
   }
   
-  // con esto arrancaria el minijuego
   method prepararPizza() {
-    // se crea el minijuego
     minijuegoActual = new PizzaMiniJuego(jugador = self)
   }
   
   method crearPizza() {
     pizzasEnMano += 1
-
-    // cuando se termina la pizza cerramos el minijuego
     minijuegoActual = null
     console.println("¡Pizza creada! Pizzas en mano: " + pizzasEnMano)
   }
@@ -48,21 +44,23 @@ class Jugador {
     puntaje = (puntaje - puntosPerdidos).max(0)
   }
   
-  method moverseAbajo() {
-    const numeroDeBarraActual = self.obtenerNumeroDeBarraActual(barraActual)
-    
-    if (numeroDeBarraActual < juego.barras().size()) {
-      barraActual = juego.barras().get(numeroDeBarraActual)
+  method subir() {
+        const numeroActual = barraActual.numero()
+      if (numeroActual > 1) {
+        barraActual = juego.barras().get(numeroActual - 2)
+        position = game.at(1, position.y() - 2)
+        }
     }
-  }
-  
-  method moverseArriba() {
-    const numeroDeBarraActual = self.obtenerNumeroDeBarraActual(barraActual)
     
-    if (numeroDeBarraActual > 1) {
-      barraActual = juego.barras().get(numeroDeBarraActual - 2)
+    method bajar() {
+        const numeroActual = barraActual.numero()
+      if (numeroActual < juego.barras().size()) {
+        barraActual = juego.barras().get(numeroActual)
+        position = game.at(1, position.y() + 2)
+        }
     }
-  }
   
   method obtenerNumeroDeBarraActual(barra) = barra.numero()
+
+  method image() = if (pizzasEnMano > 0) "jugador_con_pizza.jpg" else "jugador_normal.jpg"
 }
