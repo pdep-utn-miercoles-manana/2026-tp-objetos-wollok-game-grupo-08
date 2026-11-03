@@ -21,7 +21,6 @@ object juego {
             barra.agregarCliente(new Critico(pedido = 2, paciencia = 80))
             barra.agregarCliente(new Casual(pedido = 1, paciencia = 70))
             barra.agregarCliente(new Familia(pedido = 3, paciencia = 90))
-            //barra.agregarCliente(new Hambriento(pedido = 2, paciencia = 100))
           
             barra.actualizarPosicionesClientes()
             barra.clientes().forEach({ cliente =>

@@ -2,6 +2,7 @@ import wollok.game.*
 import juego.*
 import barra.*
 import jugador.*
+import sonido.*
 
 object pantallaPausa {
     method position() = game.at(5, 1) 
@@ -14,6 +15,9 @@ program pizzeroArgento {
     game.height(8)
     game.cellSize(64)
     game.boardGround("fondoPizzeria.png")
+
+    game.addVisual(sonido)
+    sonido.iniciarMusica()
 
     game.addVisual(jugador)
     game.addVisual(marcador)
@@ -86,13 +90,17 @@ program pizzeroArgento {
         }
     })
     
-    keyboard.p().onPressDo({ 
+    keyboard.r().onPressDo({ 
         if (pausado) {
             pausado = false
             game.removeVisual(pantallaPausa)
             console.println("Juego reanudado")
         }
     })
+
+    keyboard.m().onPressDo({ sonido.silenciar() })
+
+    keyboard.u().onPressDo({ sonido.activar() })
     // ----------------------------------------
 
     game.start()

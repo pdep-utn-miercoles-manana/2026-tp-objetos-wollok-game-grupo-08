@@ -1,5 +1,6 @@
 import jugador.*
 import barra.*
+import sonido.*
 import wollok.game.*
 
 class Cliente {
@@ -43,6 +44,7 @@ class Cliente {
     method recibirPedido(unJugador) {
         unJugador.perderPizzas()
         unJugador.sumarPuntos(puntos)
+        sonido.reproducir("coinsplash.wav")
     }
 
     method validarPedido(cantidadEntregada, unJugador) {

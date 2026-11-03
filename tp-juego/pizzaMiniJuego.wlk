@@ -1,4 +1,5 @@
 import jugador.*
+import sonido.*
 import wollok.game.*
 
 class PizzaMiniJuego {
@@ -22,6 +23,7 @@ class PizzaMiniJuego {
   }
   
   method completarPizza() {
+    sonido.reproducir("pizza-ready.wav")
     jugador.crearPizza()
   }
 }
