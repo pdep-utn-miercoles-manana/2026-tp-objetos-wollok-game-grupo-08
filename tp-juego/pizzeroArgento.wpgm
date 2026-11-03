@@ -5,7 +5,7 @@ import jugador.*
 import sonido.*
 
 object pantallaPausa {
-    method position() = game.at(5, 1) 
+    method position() = game.at(5, 1)
     method image() = "pausa.png"
 }
 
@@ -14,21 +14,26 @@ program pizzeroArgento {
     game.width(12)
     game.height(8)
     game.cellSize(64)
-    game.boardGround("fondoPizzeria.png")
+    game.boardGround("menu.png")
 
-    game.addVisual(sonido)
-    sonido.iniciarMusica()
-
-    game.addVisual(jugador)
-    game.addVisual(marcador)
-
-    juego.iniciar()
-
+    var iniciado = false
     var pausado = false
+
+    keyboard.i().onPressDo({
+        if (!iniciado) {
+            iniciado = true
+            game.boardGround("fondoPizzeria.png")
+            game.addVisual(sonido)
+            sonido.iniciarMusica()
+            game.addVisual(jugador)
+            game.addVisual(marcador)
+            juego.iniciar()
+        }
+    })
 
     // El tick corre siempre, pero si 'pausado' es true, no ejecuta nada adentro
     game.onTick(1000, "bajarPaciencia", {
-        if (!pausado) {
+        if (iniciado && !pausado) {
             juego.barras().forEach({ barra =>
                 barra.clientes().copy().forEach({ cliente =>
                     cliente.pasarTiempo()
@@ -39,16 +44,16 @@ program pizzeroArgento {
 
     // Controles de movimiento
     keyboard.up().onPressDo({ 
-        if (!pausado) { jugador.subir() } 
+        if (iniciado && !pausado) { jugador.subir() } 
     })
     
     keyboard.down().onPressDo({ 
-        if (!pausado) { jugador.bajar() } 
+        if (iniciado && !pausado) { jugador.bajar() } 
     })
 
     // Preparar una pizza
     keyboard.x().onPressDo({
-        if (!pausado) {
+        if (iniciado && !pausado) {
             if (jugador.minijuegoActual() == null) {
                 jugador.prepararPizza()
             }
@@ -57,7 +62,7 @@ program pizzeroArgento {
 
     // Entregar el pedido
     keyboard.c().onPressDo({
-        if (!pausado) {
+        if (iniciado && !pausado) {
             if (jugador.barraActual().clientes().isEmpty()) {
                 game.say(jugador, "No hay clientes en esta barra")
             } else {
@@ -72,7 +77,7 @@ program pizzeroArgento {
 
     // Amasar con Z
     keyboard.z().onPressDo({
-        if (!pausado) {
+        if (iniciado && !pausado) {
             if (jugador.minijuegoActual() != null) {
                 jugador.minijuegoActual().registrarClick()
             } else {
@@ -83,7 +88,7 @@ program pizzeroArgento {
 
     // --- PAUSA (P) Y REANUDAR (R) LIMPIOS ---
     keyboard.p().onPressDo({ 
-        if (!pausado) {
+        if (iniciado && !pausado) {
             pausado = true
             game.addVisual(pantallaPausa)
             console.println("Juego pausado")
@@ -91,16 +96,16 @@ program pizzeroArgento {
     })
     
     keyboard.r().onPressDo({ 
-        if (pausado) {
+        if (iniciado && pausado) {
             pausado = false
             game.removeVisual(pantallaPausa)
             console.println("Juego reanudado")
         }
     })
 
-    keyboard.m().onPressDo({ sonido.silenciar() })
+    keyboard.m().onPressDo({ if (iniciado) { sonido.silenciar() } })
 
-    keyboard.u().onPressDo({ sonido.activar() })
+    keyboard.u().onPressDo({ if (iniciado) { sonido.activar() } })
     // ----------------------------------------
 
     game.start()
