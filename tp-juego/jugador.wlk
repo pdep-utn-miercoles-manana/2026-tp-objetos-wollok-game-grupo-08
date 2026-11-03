@@ -3,7 +3,6 @@ import juego.*
 import barra.*
 import pizzaMiniJuego.*
 import wollok.game.*
-import tp-juego.pizzeroArgento.cartelPresionarZ
 
 object jugador {
   var property puntaje = 0
@@ -25,12 +24,9 @@ object jugador {
   }
   
   method prepararPizza() {
-        console.println("--- INTENTANDO PREPARAR PIZZA ---")
         minijuegoActual = new PizzaMiniJuego(jugador = self)
         game.addVisual(minijuegoActual)
-        game.addVisual(cartelPresionarZ)
         minijuegoActual.estaVisible(true)
-        console.println("--- PIZZA CREADA Y VISUALES AGREGADOS ---")
     }
     
     method crearPizza() {
@@ -39,11 +35,6 @@ object jugador {
         // Removemos el minijuego si existe
         if (minijuegoActual != null) {
             try { game.removeVisual(minijuegoActual)} catch e {}
-        }
-        
-        // Removemos el cartel de forma segura usando .contains() de Wollok
-        if (game.allVisuals().contains(cartelPresionarZ)) {
-            game.removeVisual(cartelPresionarZ)
         }
         
         minijuegoActual = null
