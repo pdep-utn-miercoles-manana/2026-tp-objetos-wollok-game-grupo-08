@@ -6,26 +6,20 @@ import jugador.*
 program pizzeroArgento {
     game.title("Pizzero Argento")
     game.width(12)
-    game.height(9)
-    
-    // Añadimos las barras y al jugador visualmente
-    game.addVisual(barraSuperior)
-    game.addVisual(barraMediaSuperior)
-    game.addVisual(barraMediaInferior)
-    game.addVisual(barraInferior)
+    game.height(8)
+    game.cellSize(64)
+    game.boardGround("fondoPizzeria.png")
+
     game.addVisual(jugador)
-    
+    game.addVisual(marcador)
+
     juego.iniciar()
-    
+
     // Timer de paciencia (baja cada 1 segundo)
     game.onTick(1000, "bajarPaciencia", {
-        juego.barras().forEach({ barra => 
-            barra.clientes().copy().forEach({ cliente => 
-                cliente.pasarTiempo(jugador)
-                // Si el cliente se fue, lo removemos visualmente del juego
-                if (cliente.barra() == null) {
-                    game.removeVisual(cliente)
-                }
+        juego.barras().forEach({ barra =>
+            barra.clientes().copy().forEach({ cliente =>
+                cliente.pasarTiempo()
             })
         })
     })
@@ -33,22 +27,31 @@ program pizzeroArgento {
     // Controles de movimiento
     keyboard.up().onPressDo({ jugador.subir() })
     keyboard.down().onPressDo({ jugador.bajar() })
-    
-    // Acciones
-    keyboard.x().onPressDo({ 
-        jugador.prepararPizza()
-        if (jugador.minijuegoActual() != null) {
+
+    // Preparar una pizza
+    keyboard.x().onPressDo({
+        if (jugador.minijuegoActual() == null) {
+            jugador.prepararPizza()
             game.addVisual(jugador.minijuegoActual())
+            jugador.minijuegoActual().estaVisible(true)
         }
     })
-    
-    keyboard.c().onPressDo({ 
-        const clienteAtendido = jugador.barraActual().obtenerPrimerCliente()
-        jugador.entregarPedido()
-        game.removeVisual(clienteAtendido) // Lo quita visualmente al atenderlo
+
+    // Entregar el pedido al primer cliente de la barra actual
+    keyboard.c().onPressDo({
+        if (jugador.barraActual().clientes().isEmpty()) {
+            game.say(jugador, "No hay clientes en esta barra")
+        } else {
+            if (jugador.pizzasEnMano() <= 0) {
+                game.say(jugador, "Primero tenes que preparar una pizza (X)")
+            } else {
+                jugador.entregarPedido()
+            }
+        }
     })
-    
-    keyboard.space().onPressDo({ 
+
+    // Cada pulsacion de espacio avanza la preparacion
+    keyboard.space().onPressDo({
         if (jugador.minijuegoActual() != null) {
             jugador.minijuegoActual().registrarClick()
         }

@@ -1,10 +1,10 @@
 import cliente.*
+import wollok.game.*
 
 class Barra {
   const property numero = 0
   const property clientes = []
   const property position
-  const property image = "barra.jpg"
 
   method obtenerPrimerCliente() {
     self.validarSiHayClientes()
@@ -20,17 +20,19 @@ class Barra {
   method agregarCliente(cliente) {
     clientes.add(cliente)
     cliente.barra(self)
+    self.actualizarPosicionesClientes()
   }
   
   method removerCliente(cliente) {
     clientes.remove(cliente)
     cliente.barra(null)
+    self.actualizarPosicionesClientes()
   }
 
   method retirarOtroCliente(clienteActual) {
     const otrosClientes = clientes.filter({ cliente => cliente != clienteActual })
     if(!otrosClientes.isEmpty()) {
-      self.removerCliente(otrosClientes.anyOne())
+      otrosClientes.anyOne().irse()
     }
   }
 

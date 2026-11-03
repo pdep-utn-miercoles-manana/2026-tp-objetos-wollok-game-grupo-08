@@ -4,11 +4,12 @@ import wollok.game.*
 class PizzaMiniJuego {
   var property clicksTotales = 10
   var property clicksActuales = 0
+  var property estaVisible = false
   const property jugador
 
-  const property position = game.at(3, 3)
-  const property image = "minijuego_pizza_fondo.jpg"
-  method text() = "Amasa: " + clicksActuales + "/" + clicksTotales
+  const property position = game.at(8, 5)
+  method text() = "AMASAR: " + clicksActuales + "/" + clicksTotales
+  method textColor() = "FFFFFFFF"
   
   method registrarClick() {
     clicksActuales += 1

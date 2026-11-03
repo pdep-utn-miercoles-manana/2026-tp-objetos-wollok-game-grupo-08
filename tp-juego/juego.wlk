@@ -1,3 +1,4 @@
+import wollok.game.*
 import barra.*
 import cliente.*
 import jugador.*
@@ -22,7 +23,11 @@ object juego {
             barra.agregarCliente(new Familia(pedido = 3, paciencia = 18))
             barra.agregarCliente(new Hambriento(pedido = 2, paciencia = 10))
           
-            barra.clientes().forEach({ cliente => game.addVisual(cliente) })
+            barra.actualizarPosicionesClientes()
+            barra.clientes().forEach({ cliente =>
+                cliente.estaEnJuego(true)
+                game.addVisual(cliente)
+            })
         })
     }
   
