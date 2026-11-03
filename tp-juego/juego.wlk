@@ -17,16 +17,18 @@ object juego {
   
   method cargarClientesIniciales() {
         barras.forEach({ barra =>
-            barra.agregarCliente(new Hambriento(pedido = 1, paciencia = 15))
-            barra.agregarCliente(new Critico(pedido = 2, paciencia = 12))
-            barra.agregarCliente(new Casual(pedido = 1, paciencia = 20))
-            barra.agregarCliente(new Familia(pedido = 3, paciencia = 18))
-            barra.agregarCliente(new Hambriento(pedido = 2, paciencia = 10))
+            barra.agregarCliente(new Hambriento(pedido = 1, paciencia = 60))
+            barra.agregarCliente(new Critico(pedido = 2, paciencia = 80))
+            barra.agregarCliente(new Casual(pedido = 1, paciencia = 70))
+            barra.agregarCliente(new Familia(pedido = 3, paciencia = 90))
+            //barra.agregarCliente(new Hambriento(pedido = 2, paciencia = 100))
           
             barra.actualizarPosicionesClientes()
             barra.clientes().forEach({ cliente =>
                 cliente.estaEnJuego(true)
                 game.addVisual(cliente)
+                game.addVisual(cliente.visualPaciencia())
+                game.addVisual(cliente.visualPedido())
             })
         })
     }

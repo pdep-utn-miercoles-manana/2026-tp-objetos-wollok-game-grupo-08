@@ -7,13 +7,25 @@ class PizzaMiniJuego {
   var property estaVisible = false
   const property jugador
 
-  const property position = game.at(8, 5)
+  // Nuevo estado para la animación de la tecla
+    var property presionada = false
+    // La imagen cambia dinámicamente si está presionada o no
+    method image() = if (presionada) "zpresionada.png" else "znopresionada.png"
+
+  const property position = game.at(1, 5)
   method text() = "AMASAR: " + clicksActuales + "/" + clicksTotales
   method textColor() = "FFFFFFFF"
   
   method registrarClick() {
     clicksActuales += 1
-    if (clicksActuales >= clicksTotales) self.completarPizza()
+    console.println("Clics actuales: " + clicksActuales + " / " + clicksTotales)
+
+    presionada = true
+    game.schedule(100, { presionada = false })
+
+    if (clicksActuales >= clicksTotales) {
+        self.completarPizza()
+    }
   }
   
   method completarPizza() {

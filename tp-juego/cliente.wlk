@@ -10,9 +10,24 @@ class Cliente {
     var property position = game.at(3, 6)
     var property etapaDesvanecimiento = 0
     var property estaEnJuego = false
-    
+    var property visualPaciencia = null
+    var property visualPedido = null
+
 
     method imagenNormal() = "clienteNormal.png"
+    
+
+    method inicializarVisualPedido() {
+    visualPedido = new VisualPedido(cliente = self)
+    }
+
+    method inicializarBarraPaciencia() {
+    visualPaciencia = new BarraPaciencia(cliente = self)
+    }
+
+    method bloquesRestantes(cantidad) =
+    if (cantidad <= 0) "" 
+    else "■" + self.bloquesRestantes(cantidad - 1)
 
     method imagenDesvanecida() {
         if (etapaDesvanecimiento == 1) return "clienteNormal1.png"
@@ -23,7 +38,7 @@ class Cliente {
 
     method image() = if (etapaDesvanecimiento == 0) self.imagenNormal() else self.imagenDesvanecida()
 
-    method text() = "P:" + pedido + " | T:" + paciencia
+    //method text() = "P:" + pedido + " | T:" + paciencia
 
     method recibirPedido(unJugador) {
         unJugador.perderPizzas()
@@ -51,6 +66,15 @@ class Cliente {
         if (barra != null) {
             barra.removerCliente(self)
         }
+
+        if (visualPaciencia != null) {
+        game.removeVisual(visualPaciencia)
+     }
+
+        if (visualPedido != null) {
+        game.removeVisual(visualPedido)
+    }
+
         if (estaEnJuego && etapaDesvanecimiento == 0) {
             etapaDesvanecimiento = 1
             game.schedule(120, { self.avanzarDesvanecimiento() })
@@ -71,12 +95,12 @@ class Cliente {
 }
 
 class Hambriento inherits Cliente {
-    override method imagenNormal() = "clienteNormal.png"
+    override method imagenNormal() = "clienteApurado.png"
     override method imagenDesvanecida() {
-        if (etapaDesvanecimiento == 1) return "clienteNormal1.png"
-        if (etapaDesvanecimiento == 2) return "clienteNormal2.png"
-        if (etapaDesvanecimiento == 3) return "clienteNormal3.png"
-        return "clienteNormal4.png"
+        if (etapaDesvanecimiento == 1) return "clienteApurado1.png"
+        if (etapaDesvanecimiento == 2) return "clienteApurado2.png"
+        if (etapaDesvanecimiento == 3) return "clienteApurado3.png"
+        return "clienteApurado4.png"
     }
     override method enojarse(_unJugador) {
         _unJugador.perderPizzas()
@@ -119,4 +143,28 @@ class Familia inherits Cliente {
             barra.retirarOtroCliente(self)
         }
     }
+}
+
+class BarraPaciencia {
+    const property cliente
+
+    method position() = cliente.position().up(0.5)
+
+    method text() = cliente.bloquesRestantes((cliente.paciencia() / 10).truncate(0))
+
+    method textColor() = "FFFFFFFF"
+}
+
+class VisualPedido {
+    const property cliente
+
+    method position() =
+        game.at(
+            cliente.position().x() + 0.5,
+            cliente.position().y() 
+        )
+
+    method text() = "x" + cliente.pedido()
+
+    method textColor() = "FFFFFFFF"
 }

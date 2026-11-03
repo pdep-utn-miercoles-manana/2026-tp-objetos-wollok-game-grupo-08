@@ -3,6 +3,12 @@ import juego.*
 import barra.*
 import jugador.*
 
+object cartelPresionarZ {
+    method position() = game.at(1, 6) 
+    method text() = "Presiona Z"
+    method textColor() = "FFFF00FF"
+}
+
 program pizzeroArgento {
     game.title("Pizzero Argento")
     game.width(12)
@@ -29,11 +35,10 @@ program pizzeroArgento {
     keyboard.down().onPressDo({ jugador.bajar() })
 
     // Preparar una pizza
+    // Preparar una pizza
     keyboard.x().onPressDo({
         if (jugador.minijuegoActual() == null) {
             jugador.prepararPizza()
-            game.addVisual(jugador.minijuegoActual())
-            jugador.minijuegoActual().estaVisible(true)
         }
     })
 
@@ -51,9 +56,12 @@ program pizzeroArgento {
     })
 
     // Cada pulsacion de espacio avanza la preparacion
-    keyboard.space().onPressDo({
+    // Cada pulsacion de Z avanza la preparacion
+    keyboard.z().onPressDo({
         if (jugador.minijuegoActual() != null) {
             jugador.minijuegoActual().registrarClick()
+        } else {
+            game.say(jugador, "¡Presiona X para empezar a amasar!")
         }
     })
 

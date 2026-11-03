@@ -20,6 +20,8 @@ class Barra {
   method agregarCliente(cliente) {
     clientes.add(cliente)
     cliente.barra(self)
+    cliente.inicializarBarraPaciencia()
+    cliente.inicializarVisualPedido()
     self.actualizarPosicionesClientes()
   }
   
@@ -37,15 +39,15 @@ class Barra {
   }
 
   method actualizarPosicionesClientes() {
-    var desplazamiento = 3
+    var desplazamiento = 4
     clientes.forEach({ cliente => 
         cliente.position(game.at(desplazamiento, position.y()))
-        desplazamiento += 1
+        desplazamiento += 2
     })
   }
 }
 
-const barraSuperior = new Barra(numero = 1, position = game.at(0, 6))
+const barraSuperior = new Barra(numero = 1, position = game.at(0, 5.5))
 const barraMediaSuperior = new Barra(numero = 2, position = game.at(0, 4))
 const barraMediaInferior = new Barra(numero = 3, position = game.at(0, 2))
-const barraInferior = new Barra(numero = 4, position = game.at(0, 0))
+const barraInferior = new Barra(numero = 4, position = game.at(0, 0.25))

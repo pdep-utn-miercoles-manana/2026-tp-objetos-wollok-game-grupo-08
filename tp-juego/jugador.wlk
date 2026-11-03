@@ -3,13 +3,14 @@ import juego.*
 import barra.*
 import pizzaMiniJuego.*
 import wollok.game.*
+import tp-juego.pizzeroArgento.cartelPresionarZ
 
 object jugador {
   var property puntaje = 0
   var property barraActual = barraSuperior
   var property pizzasEnMano = 0
   var property minijuegoActual = null
-  var property position = game.at(1, 6)
+  var property position = game.at(2.5, 6)
   
   method entregarPedido() {
     self.validarEntrega()
@@ -24,17 +25,30 @@ object jugador {
   }
   
   method prepararPizza() {
-    minijuegoActual = new PizzaMiniJuego(jugador = self)
-  }
-  
-  method crearPizza() {
-    pizzasEnMano += 1
-    if (minijuegoActual != null && minijuegoActual.estaVisible()) {
-      game.removeVisual(minijuegoActual)
+        console.println("--- INTENTANDO PREPARAR PIZZA ---")
+        minijuegoActual = new PizzaMiniJuego(jugador = self)
+        game.addVisual(minijuegoActual)
+        game.addVisual(cartelPresionarZ)
+        minijuegoActual.estaVisible(true)
+        console.println("--- PIZZA CREADA Y VISUALES AGREGADOS ---")
     }
-    minijuegoActual = null
-    console.println("¡Pizza creada! Pizzas en mano: " + pizzasEnMano)
-  }
+    
+    method crearPizza() {
+        pizzasEnMano += 1
+        
+        // Removemos el minijuego si existe
+        if (minijuegoActual != null) {
+            try { game.removeVisual(minijuegoActual)} catch e {}
+        }
+        
+        // Removemos el cartel de forma segura usando .contains() de Wollok
+        if (game.allVisuals().contains(cartelPresionarZ)) {
+            game.removeVisual(cartelPresionarZ)
+        }
+        
+        minijuegoActual = null
+        console.println("¡Pizza creada! Pizzas en mano: " + pizzasEnMano)
+    }
   
   method perderPizzas() {
     pizzasEnMano = 0
@@ -52,7 +66,7 @@ object jugador {
         const numeroActual = barraActual.numero()
       if (numeroActual > 1) {
         barraActual = juego.barras().get(numeroActual - 2)
-        position = game.at(1, position.y() + 2)
+        position = game.at(2.5, position.y() + 2)
         }
     }
     
@@ -60,7 +74,7 @@ object jugador {
         const numeroActual = barraActual.numero()
       if (numeroActual < juego.barras().size()) {
         barraActual = juego.barras().get(numeroActual)
-        position = game.at(1, position.y() - 2)
+        position = game.at(2.5, position.y() - 2)
         }
     }
   
@@ -70,7 +84,7 @@ object jugador {
 }
 
 object marcador {
-  method position() = game.at(8, 7)
+  method position() = game.at(2.5, 7)
   method text() = "Puntos: " + jugador.puntaje() + " | Pizzas: " + jugador.pizzasEnMano()
   method textColor() = "FFFFFFFF"
 }
