@@ -10,6 +10,10 @@ object sonido {
     method image() = if (activo) "soundOnWhite.png" else "soundOffWhite.png"
 
     method iniciarMusica() {
+        if (musicaDeFondo != null) {
+            musicaDeFondo.stop()
+        }
+        musicaIniciada = false
         musicaDeFondo = game.sound("pizzero-argento-back-music.wav")
         musicaDeFondo.shouldLoop(true)
         game.schedule(500, { self.reproducirMusica() })

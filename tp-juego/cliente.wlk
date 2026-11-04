@@ -93,7 +93,9 @@ class Cliente {
         }
     }
     
-    method enojarse(unJugador) {}
+    method enojarse(unJugador) {
+        sonido.reproducir("critic-client-grunt.wav")
+    }
 }
 
 class Hambriento inherits Cliente {
@@ -105,6 +107,7 @@ class Hambriento inherits Cliente {
         return "clienteApurado4.png"
     }
     override method enojarse(_unJugador) {
+        sonido.reproducir("critic-client-grunt.wav")
         _unJugador.perderPizzas()
     }
 }
@@ -118,6 +121,7 @@ class Critico inherits Cliente {
         return "clienteCritico4.png"
     }
     override method enojarse(unJugador) {
+        sonido.reproducir("critic-client-grunt.wav")
         unJugador.restarPuntos(30)
     }
 }
@@ -141,6 +145,7 @@ class Familia inherits Cliente {
         return "clienteFamilia4.png"
     }
     override method enojarse(unJugador) {
+        sonido.reproducir("critic-client-grunt.wav")
         if(barra != null) {
             barra.retirarOtroCliente(self)
         }

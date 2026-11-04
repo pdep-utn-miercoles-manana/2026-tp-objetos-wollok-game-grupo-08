@@ -5,8 +5,21 @@ import jugador.*
 
 object juego {
   var clientesInicializados = false
+  var property finalizado = false
   
   const property barras = [barraSuperior, barraMediaSuperior, barraMediaInferior, barraInferior]
+
+  method noQuedanClientes() = barras.all({ barra => barra.clientes().isEmpty() })
+
+  method terminar() {
+    finalizado = true
+  }
+
+  method reiniciar() {
+    finalizado = false
+    clientesInicializados = false
+    self.iniciar()
+  }
   
   method iniciar() {
     if (!clientesInicializados) {
